@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class Player : MonoBehaviour {
+	public float health = 100;
 	public float speed = 300;
 
 	Rigidbody2D rb;
