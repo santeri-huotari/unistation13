@@ -1,22 +1,36 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-enum FloorType {
+enum FloorLayer {
+	LATTICE,
+	CATWALK,
+	PLATE,
 	FLOOR,
-	PANEL,
-	GRID
 }
 
-public class Floor : MonoBehaviour {
-	// How much each gas this tile contains
-	public float oxygen = 0;
-	public float carbon_dioxide = 0;
+public class Floor : Tile {
+	public Sprite spriteLattice;
+	public Sprite spriteCatwalk;
+	public Sprite spritePlate;
+	public Sprite spriteFloor;
 
-	FloorType layer = FloorType.FLOOR;
+	SpriteRenderer sr;
+	FloorLayer layer {
+		get {return layer;}
+		set {
+			if (value == FloorLayer.FLOOR) {
+				sr.sprite = spriteFloor;
+			}
+			else if (value == FloorLayer.PLATE) {
+				sr.sprite = spritePlate;
+			}
+			layer = value;
+		}
+	}
 
 	// Use this for initialization
 	void Start () {
-	
+		sr = gameObject.GetComponent<SpriteRenderer>();
 	}
 	
 	// Update is called once per frame

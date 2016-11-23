@@ -18,5 +18,17 @@ public class Player : MonoBehaviour {
 		float xdir = Input.GetAxisRaw("Horizontal");
 		float ydir = Input.GetAxisRaw("Vertical");
 		rb.velocity = new Vector2(speed * xdir * Time.deltaTime, speed *  ydir * Time.deltaTime);
+
+		// Rotate player
+		/*
+		if (ydir > 0)
+			sr.sprite = spritesheet[1];
+		else if (ydir < 0)
+			sr.sprite = spritesheet[0];
+		else if (xdir > 0)
+			sr.sprite = spritesheet[3];
+		else if (xdir < 0)
+			sr.sprite = spritesheet[3];
+		*/
 	}
 }
