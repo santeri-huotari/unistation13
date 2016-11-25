@@ -13,6 +13,8 @@ public class Floor : Tile {
 	public Sprite spriteCatwalk;
 	public Sprite spritePlate;
 	public Sprite spriteFloor;
+	public Sprite spriteNitrousOxide;
+	public Sprite spritePlasma;
 
 	SpriteRenderer sr;
 	FloorLayer layer {
@@ -29,12 +31,22 @@ public class Floor : Tile {
 	}
 
 	// Use this for initialization
-	void Start () {
+	new void Start () {
 		sr = gameObject.GetComponent<SpriteRenderer>();
+		base.Start();
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void Update() {
+		// Draw certain gases
+		if (gases["nitrousOxide"] > 10) {
+			sr.sprite = spriteNitrousOxide;
+		} else
+			layer = layer;
+
+		if (gases["plasma"] > 10) {
+			sr.sprite = spritePlasma;
+		} else
+			layer = layer;
 	}
 }
