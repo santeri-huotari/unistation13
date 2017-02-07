@@ -17,8 +17,9 @@ public class Floor : Tile {
 	public Sprite spritePlasma;
 
 	SpriteRenderer sr;
+	FloorLayer _layer;
 	FloorLayer layer {
-		get {return layer;}
+		get {return _layer;}
 		set {
 			if (value == FloorLayer.FLOOR) {
 				sr.sprite = spriteFloor;
@@ -26,7 +27,7 @@ public class Floor : Tile {
 			else if (value == FloorLayer.PLATE) {
 				sr.sprite = spritePlate;
 			}
-			layer = value;
+			_layer = value;
 		}
 	}
 

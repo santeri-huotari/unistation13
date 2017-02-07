@@ -19,17 +19,15 @@ public class Tile : MonoBehaviour {
 	List<Tile> neighborTiles = new List<Tile>();
 
 	protected void Start() {
-		collNeighbor = gameObject.AddComponent<BoxCollider2D>();
+	    collNeighbor = gameObject.AddComponent<BoxCollider2D>();
 		collNeighbor.size = new Vector2(1.9f, 1.9f);
 		collNeighbor.isTrigger = true;
 
-		/* PROBLEMATIC PART
 		gases.Add("oxygen", 0.0f);
 		gases.Add("carbonDioxide", 0.0f);
 		gases.Add("nitrogen", 0.0f);
 		gases.Add("nitrousOxide", 0.0f);
 		gases.Add("plasma", 0.0f);
-		 * PROBLEMATIC PART */
 
 		gases["oxygen"] = startOxygen;
 		gases["nitrousOxide"] = startNitrousOxide;
