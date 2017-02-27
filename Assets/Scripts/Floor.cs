@@ -1,13 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-enum FloorLayer {
-	LATTICE,
-	CATWALK,
-	PLATE,
-	FLOOR,
-}
-
 public class Floor : Tile {
 	public Sprite spriteLattice;
 	public Sprite spriteCatwalk;
@@ -32,20 +25,17 @@ public class Floor : Tile {
 	}
 
 	// Use this for initialization
-	new void Start () {
-		sr = gameObject.GetComponent<SpriteRenderer>();
+	new void Start() {
 		base.Start();
+		sr = gameObject.GetComponent<SpriteRenderer>();
 	}
 	
 	// Update is called once per frame
 	void Update() {
-		// Draw certain gases
+		// Draw certain gases. Redraw layer sprite if there is not enough gas.
 		if (gases["nitrousOxide"] > 10) {
 			sr.sprite = spriteNitrousOxide;
-		} else
-			layer = layer;
-
-		if (gases["plasma"] > 10) {
+		} else if (gases["plasma"] > 10) {
 			sr.sprite = spritePlasma;
 		} else
 			layer = layer;

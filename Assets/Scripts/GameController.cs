@@ -1,11 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+enum FloorLayer {
+	LATTICE,
+	CATWALK,
+	PLATE,
+	FLOOR,
+}
+
 public class GameController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+		
 	}
 	
 	// Update is called once per frame
