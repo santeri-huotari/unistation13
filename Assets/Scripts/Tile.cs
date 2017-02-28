@@ -10,7 +10,7 @@ public class Tile : MonoBehaviour {
 	public float totalMoles = 0;
 
 	const float igc = 8.314f; // Ideal gas constant
-	const float maxGasSpeed = 10; // Max gas speed in moles per FixedUpdate()
+	const float maxGasSpeed = 15; // Max gas speed in moles per FixedUpdate()
 
 	// How much each gas this tile contains in moles.
 	public Dictionary<string, float> gases = new Dictionary<string, float>();
@@ -47,7 +47,7 @@ public class Tile : MonoBehaviour {
 		foreach (var entry in gases) {
 			totalMoles += entry.Value;
 		}
-		pressure = calcPressure(totalMoles);
+		pressure = (totalMoles * igc * temperature) / volume;
 		checkNeighbors();
 		foreach (var tile in neighborTiles) {
 			if (tile != null) {
@@ -57,24 +57,17 @@ public class Tile : MonoBehaviour {
 					if (gasSpeed > maxGasSpeed) {
 						gasSpeed = maxGasSpeed;
 					}
-					moveGases(gases, tile.gases, gasSpeed);
+					moveGases(gases, tile.gases, gasSpeed / totalMoles);
 				}
 			}
 		}
 	}
 
-	float calcPressure(float moles) {
-		return (moles * igc * temperature) / volume;
-	}
-
-	// Moves all gases from source to dest by maxMoveAmount
-	// NOTE: Only pass non-negative moveAmounts.
-	void moveGases(Dictionary<string, float> source, Dictionary<string, float> dest, float maxMoveAmount) {
+	// Moves all gases from source to dest by multiplier
+	// NOTE: Only pass multipliers in range [-1, 1]
+	void moveGases(Dictionary<string, float> source, Dictionary<string, float> dest, float multiplier) {
 		foreach (var key in gasKeys) {
-			float moveAmount = maxMoveAmount;
-			if (moveAmount > source[key]) {
-				moveAmount = source[key];
-			}
+			float moveAmount = multiplier * source[key];
 			source[key] -= moveAmount;
 			dest[key] += moveAmount;
 		}

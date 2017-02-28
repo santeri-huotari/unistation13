@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class TestGasController : MonoBehaviour {
-	public float emitInterval = 0.1f;
+	public float plasmaEmitInterval = 0;
+	public float noEmitInterval = 0;
 
 	Floor tileBelow;
 
@@ -20,6 +21,7 @@ public class TestGasController : MonoBehaviour {
 
 	void FixedUpdate() {
 		// Emit gas
-		tileBelow.gases["plasma"] += emitInterval;
+		tileBelow.gases["plasma"] += plasmaEmitInterval;
+		tileBelow.gases["nitrousOxide"] += noEmitInterval;
 	}
 }
