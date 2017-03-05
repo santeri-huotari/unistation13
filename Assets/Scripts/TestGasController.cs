@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TestGasController : MonoBehaviour {
+public class TestGasController : StationObject {
 	public float plasmaEmitInterval = 0;
 	public float noEmitInterval = 0;
 
