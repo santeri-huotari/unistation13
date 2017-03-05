@@ -28,7 +28,10 @@ public class Tile : MonoBehaviour {
 		"plasma"
 	};
 
-	// Index 0 is right, values advance counter-clockwise
+	// Index 0 is right, values advance counter-clockwise.
+	// Every null neighbor represents a default tile that
+	// has an immutable gas composition eg. empty space.
+	public static Tile defaultTile;
 	Tile[] neighborTiles = new Tile[8];
 	static Vector2[] neighborOffsets = new Vector2[] {
 		new Vector2(1, 0),
@@ -41,7 +44,7 @@ public class Tile : MonoBehaviour {
 		new Vector2(1, -1),
 	};
 
-	protected void Start() {
+	protected virtual void Start() {
 		maskDefault = LayerMask.GetMask("Default");
 		maskTile = LayerMask.GetMask("Tile");
 		foreach (var key in gasKeys) {
@@ -49,7 +52,7 @@ public class Tile : MonoBehaviour {
 		}
 	}
 
-	void FixedUpdate() {
+	protected virtual void FixedUpdate() {
 		checkSurroundings();
 		checkNeighbors();
 
@@ -60,17 +63,26 @@ public class Tile : MonoBehaviour {
 		}
 		pressure = (totalMoles * igc * temperature) / volume;
 		foreach (var tile in neighborTiles) {
-			if (tile != null && !tile.hasObstacle) {
-				// Move gases between tiles according to pressure
-				if (tile.pressure < pressure) {
-					float gasSpeed = (-(tile.totalMoles * tile.temperature - totalMoles * temperature)) / (tile.temperature + temperature);
-					if (gasSpeed > maxGasSpeed) {
-						gasSpeed = maxGasSpeed;
-					}
-					moveGases(gases, tile.gases, gasSpeed / totalMoles);
+			if (tile != null) {
+				if (!tile.hasObstacle) {
+					moveGases(gases, tile.gases, calcMultiplier(tile));
 				}
+			} else {
+				moveGases(gases, defaultTile.gases, calcMultiplier(defaultTile));
 			}
 		}
+	}
+
+	// Calculate gas movement multiplier
+	float calcMultiplier(Tile otherTile) {
+		if (otherTile.pressure < pressure) {
+			float gasSpeed = (-(otherTile.totalMoles * otherTile.temperature - totalMoles * temperature)) / (otherTile.temperature + temperature);
+			if (gasSpeed > maxGasSpeed) {
+				gasSpeed = maxGasSpeed;
+			}
+			return gasSpeed / totalMoles;
+		}
+		return 0;
 	}
 
 	// Moves all gases from source to dest by multiplier
