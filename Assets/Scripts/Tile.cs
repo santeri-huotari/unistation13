@@ -3,6 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Tile : MonoBehaviour {
+	// Surroundings
+	public bool hasObstacle = false; // Wall, closed door etc
+	List<StationObject> contents = new List<StationObject>(5);
+	int maskDefault;
+	int maskTile;
+
 	// Physical properties
 	public const float volume = 4; // m³
 	public float temperature = 273; // Kelvin
@@ -22,7 +28,10 @@ public class Tile : MonoBehaviour {
 		"plasma"
 	};
 
-	// Index 0 is right, values advance counter-clockwise
+	// Index 0 is right, values advance counter-clockwise.
+	// Every null neighbor represents a default tile that
+	// has an immutable gas composition eg. empty space.
+	public static Tile defaultTile;
 	Tile[] neighborTiles = new Tile[8];
 	static Vector2[] neighborOffsets = new Vector2[] {
 		new Vector2(1, 0),
@@ -35,32 +44,45 @@ public class Tile : MonoBehaviour {
 		new Vector2(1, -1),
 	};
 
-	protected void Start() {
+	protected virtual void Start() {
+		maskDefault = LayerMask.GetMask("Default");
+		maskTile = LayerMask.GetMask("Tile");
 		foreach (var key in gasKeys) {
 			gases.Add(key, 0);
 		}
 	}
 
-	void FixedUpdate() {
+	protected virtual void FixedUpdate() {
+		checkSurroundings();
+		checkNeighbors();
+
 		// Apply gas physics
 		totalMoles = 0;
 		foreach (var entry in gases) {
 			totalMoles += entry.Value;
 		}
 		pressure = (totalMoles * igc * temperature) / volume;
-		checkNeighbors();
 		foreach (var tile in neighborTiles) {
 			if (tile != null) {
-				// Move gases between tiles according to pressure
-				if (tile.pressure < pressure) {
-					float gasSpeed = (-(tile.totalMoles * tile.temperature - totalMoles * temperature)) / (tile.temperature + temperature);
-					if (gasSpeed > maxGasSpeed) {
-						gasSpeed = maxGasSpeed;
-					}
-					moveGases(gases, tile.gases, gasSpeed / totalMoles);
+				if (!tile.hasObstacle) {
+					moveGases(gases, tile.gases, calcMultiplier(tile));
 				}
+			} else {
+				moveGases(gases, defaultTile.gases, calcMultiplier(defaultTile));
 			}
 		}
+	}
+
+	// Calculate gas movement multiplier
+	float calcMultiplier(Tile otherTile) {
+		if (otherTile.pressure < pressure) {
+			float gasSpeed = (-(otherTile.totalMoles * otherTile.temperature - totalMoles * temperature)) / (otherTile.temperature + temperature);
+			if (gasSpeed > maxGasSpeed) {
+				gasSpeed = maxGasSpeed;
+			}
+			return gasSpeed / totalMoles;
+		}
+		return 0;
 	}
 
 	// Moves all gases from source to dest by multiplier
@@ -79,12 +101,26 @@ public class Tile : MonoBehaviour {
 			Collider2D result = Physics2D.OverlapCircle(
 				                    new Vector2(transform.position.x + neighborOffsets[i].x,
 				                                transform.position.y + neighborOffsets[i].y),
-				                    0.0f);
+				                    0.0f,
+				                    maskTile);
 			if (result == null) {
 				neighborTiles[i] = null;
 			} else {
 				neighborTiles[i] = result.gameObject.GetComponent<Tile>();
 			}
+		}
+	}
+
+	// Get references to StationObjects on this tile.
+	void checkSurroundings() {
+		contents.Clear();
+		hasObstacle = false;
+		foreach (var collider in Physics2D.OverlapCircleAll((Vector2)transform.position, 0.0f, maskDefault)) {
+			StationObject stationObject = collider.gameObject.GetComponent<StationObject>();
+			if (stationObject.isObstacle) {
+				hasObstacle = true;
+			}
+			contents.Add(stationObject);
 		}
 	}
 }
