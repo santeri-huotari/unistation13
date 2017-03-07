@@ -25,7 +25,7 @@ public class Floor : Tile {
 	}
 
 	// Use this for initialization
-	new void Start() {
+	protected override void Start() {
 		base.Start();
 		sr = gameObject.GetComponent<SpriteRenderer>();
 	}
@@ -37,7 +37,8 @@ public class Floor : Tile {
 			sr.sprite = spriteNitrousOxide;
 		} else if (gases["plasma"] > 10) {
 			sr.sprite = spritePlasma;
-		} else
-			layer = layer;
+		} else {
+			sr.sprite = spriteFloor;
+		}
 	}
 }
