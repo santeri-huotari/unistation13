@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 70a887bc0e01a48cb9e67dde7fd8dd51
+timeCreated: 1488965089
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - spriteLattice: {instanceID: 0}
+  - spriteCatwalk: {instanceID: 0}
+  - spritePlate: {instanceID: 0}
+  - spriteFloor: {instanceID: 0}
+  - spriteNitrousOxide: {fileID: 21300000, guid: d29e40c545ec6ea4a8267f4e53ae36dc,
+      type: 3}
+  - spritePlasma: {fileID: 21300000, guid: 542485b318cc8094eac1841c4f52a9a1, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
