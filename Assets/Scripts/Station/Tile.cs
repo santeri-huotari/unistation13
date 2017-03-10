@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Tile : MonoBehaviour {
 	// Surroundings
 	public bool hasObstacle = false; // Wall, closed door etc
-	List<StationObject> contents = new List<StationObject>(5);
+	public List<StationObject> contents = new List<StationObject>(5);
 	int maskDefault;
 	int maskTile;
 
@@ -20,7 +20,7 @@ public class Tile : MonoBehaviour {
 
 	// How much each gas this tile contains in moles.
 	public Dictionary<string, float> gases = new Dictionary<string, float>();
-	static string[] gasKeys = new string[] {
+	static string[] gasKeys = {
 		"oxygen",
 		"carbonDioxide",
 		"nitrogen",
@@ -32,8 +32,8 @@ public class Tile : MonoBehaviour {
 	// Every null neighbor represents a default tile that
 	// has an immutable gas composition eg. empty space.
 	public static Tile defaultTile;
-	Tile[] neighborTiles = new Tile[8];
-	static Vector2[] neighborOffsets = new Vector2[] {
+	public Tile[] neighborTiles = new Tile[8];
+	static Vector2[] neighborOffsets = {
 		new Vector2(1, 0),
 		new Vector2(1, 1),
 		new Vector2(0, 1),
