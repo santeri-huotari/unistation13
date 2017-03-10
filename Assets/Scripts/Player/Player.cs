@@ -6,17 +6,38 @@ public class Player : StationObject {
 	public float speed = 300;
 	public Sprite[] spritesheet;
 	new public Camera camera;
+	public Inventory inventory;
 
 	Rigidbody2D rb;
 	SpriteRenderer sr;
-	Inventory inventory;
 	int maskTile;
+
+	public static string[] inventorySlotNames = {
+		"HandLeft",
+		"HandRight",
+		"PocketLeft",
+		"PocketRight",
+		"Backpack",
+		"Belt",
+		"Id",
+		"SuitStorage",
+		"Shoes",
+		"InternalClothing",
+		"ExternalClothing",
+		"Gloves",
+		"Neck",
+		"Mask",
+		"Ears",
+		"Eyes",
+		"Head",
+	};
 
 	// Use this for initialization
 	void Start () {
 		rb = gameObject.GetComponent<Rigidbody2D>();
 		sr = gameObject.GetComponent<SpriteRenderer>();
 		inventory = gameObject.GetComponent<Inventory>();
+		inventory.init(inventorySlotNames);
 		inventory.activeSlotName = "HandRight";
 		maskTile = LayerMask.GetMask("Tile");
 	}
