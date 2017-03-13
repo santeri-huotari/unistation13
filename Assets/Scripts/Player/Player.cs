@@ -7,6 +7,7 @@ public class Player : StationObject {
 	public Sprite[] spritesheet;
 	new public Camera camera;
 	public Inventory inventory;
+	
 
 	Rigidbody2D rb;
 	SpriteRenderer sr;
@@ -58,19 +59,19 @@ public class Player : StationObject {
 		else if (xdir < 0)
 			sr.sprite = spritesheet[2];
 
+
 		// Mouse actions
 		if (Input.GetButtonUp("PrimaryButton")) {
 			Vector2 mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
-			float x = Mathf.Round(mousePos.x);
-			float y = Mathf.Round(mousePos.y);
+			Vector2 relativeMousePos = mousePos - (Vector2)transform.position;
+			float x = Mathf.Round(relativeMousePos.x);
+			float y = Mathf.Round(relativeMousePos.y);
 			// Limit range to 1 tile
-			if (Mathf.Abs(x) <= 1 && Mathf.Abs(y) <= 1) {
-				
-			}
-
+			bool pickable = (Mathf.Abs(x) <= 1) && (Mathf.Abs(y) <= 1);
+			
 			List<StationObject> tileContents = new List<StationObject>(0);
 			Collider2D result = Physics2D.OverlapCircle(
-				                    new Vector2(x, y),
+				                    mousePos,
 				                    0.0f,
 				                    maskTile);
 
@@ -80,7 +81,7 @@ public class Player : StationObject {
 
 			// Pick item up
 			foreach (var stationObject in tileContents) {
-				if (stationObject.isPickable && inventory.activeSlot.isEmpty()) {
+				if (stationObject.isPickable && inventory.activeSlot.isEmpty() && pickable) {
 					inventory.activeSlot.item = ((DroppedItem)stationObject).item;
 					Destroy(stationObject.gameObject);
 					break;
