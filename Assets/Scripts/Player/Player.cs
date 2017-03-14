@@ -63,11 +63,11 @@ public class Player : StationObject {
 		// Mouse actions
 		if (Input.GetButtonUp("PrimaryButton")) {
 			Vector2 mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
+			mousePos.x = Mathf.Round(mousePos.x);
+			mousePos.y = Mathf.Round(mousePos.y);
 			Vector2 relativeMousePos = mousePos - (Vector2)transform.position;
-			float x = Mathf.Round(relativeMousePos.x);
-			float y = Mathf.Round(relativeMousePos.y);
 			// Limit range to 1 tile
-			bool pickable = (Mathf.Abs(x) <= 1) && (Mathf.Abs(y) <= 1);
+			bool pickable = (Mathf.Abs(relativeMousePos.x) <= 1) && (Mathf.Abs(relativeMousePos.y) <= 1);
 			
 			List<StationObject> tileContents = new List<StationObject>(0);
 			Collider2D result = Physics2D.OverlapCircle(
