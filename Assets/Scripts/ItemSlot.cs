@@ -7,7 +7,7 @@ public class ItemSlot {
 	public Item item {
 		get {return _item;}
 		set {
-			if (value.size <= this.size) {
+			if (value != null && value.size <= this.size) {
 				_item = value;
 			}
 		}
@@ -17,5 +17,9 @@ public class ItemSlot {
 
 	public bool isEmpty() {
 		return item == null;
+	}
+
+	public void empty() {
+		_item = null;
 	}
 }

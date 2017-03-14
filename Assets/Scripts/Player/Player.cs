@@ -80,6 +80,7 @@ public class Player : StationObject {
 			}
 
 			// Pick item up
+			// TODO: Pick the topmost item first
 			foreach (var stationObject in tileContents) {
 				if (stationObject.isPickable && inventory.activeSlot.isEmpty() && pickable) {
 					inventory.activeSlot.item = ((DroppedItem)stationObject).item;
@@ -95,6 +96,15 @@ public class Player : StationObject {
 			inventory.activeSlotName = "HandLeft";
 		} else {
 			inventory.activeSlotName = "HandRight";
+		}
+	}
+
+	public void dropItem() {
+		if (!inventory.activeSlot.isEmpty()) {
+			Instantiate(ItemDatabase.instance.getDroppedPrefab(inventory.activeSlot.item),
+			            transform.position,
+			            Quaternion.identity);
+			inventory.activeSlot.empty();
 		}
 	}
 }

@@ -28,4 +28,8 @@ public class DefaultUI : MonoBehaviour {
 			}
 		}
 	}
+
+	public void callMethodFromPlayer(string methodName) {
+		player.Invoke(methodName, 0.0f);
+	}
 }
