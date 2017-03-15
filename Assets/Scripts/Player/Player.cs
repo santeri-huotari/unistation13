@@ -3,15 +3,15 @@ using UnityEngine;
 
 public class Player : StationObject {
 	public float health = 100;
-	public float speed = 300;
+	[SerializeField]
+	float speed = 0.2f;
 	public Sprite[] spritesheet;
 	new public Camera camera;
 	public Inventory inventory;
-	
 
-	Rigidbody2D rb;
 	SpriteRenderer sr;
 	int maskTile;
+	Vector2 targetPos;
 
 	public static string[] inventorySlotNames = {
 		"HandLeft",
@@ -33,32 +33,45 @@ public class Player : StationObject {
 		"Head",
 	};
 
-	// Use this for initialization
-	void Start () {
-		rb = gameObject.GetComponent<Rigidbody2D>();
+	void Start() {
 		sr = gameObject.GetComponent<SpriteRenderer>();
 		inventory = gameObject.GetComponent<Inventory>();
 		inventory.init(inventorySlotNames);
 		inventory.activeSlotName = "HandRight";
 		maskTile = LayerMask.GetMask("Tile");
+		targetPos = new Vector2(7,0);
 	}
-	
-	// Update is called once per frame
-	void Update () {// Movement
+
+	// Set move target if it is possible to move to it.
+	void setMoveTarget(float xdir, float ydir) {
+		Collider2D result = Physics2D.OverlapCircle(
+			                    new Vector2(transform.position.x + xdir,
+			                                transform.position.y + ydir),
+			                    0.0f,
+			                    maskTile);
+		if (result != null) {
+			if (!result.gameObject.GetComponent<Tile>().hasObstacle) {
+				targetPos.x += xdir;
+				targetPos.y += ydir;
+			}
+		} else {
+			targetPos.x += xdir;
+			targetPos.y += ydir;
+		}
+	}
+
+	void Update() {
+		// Movement
 		float xdir = Input.GetAxisRaw("Horizontal");
 		float ydir = Input.GetAxisRaw("Vertical");
-		rb.velocity = new Vector2(speed * xdir * Time.deltaTime, speed * ydir * Time.deltaTime);
-
-		// Rotate player
-		if (ydir > 0)
-			sr.sprite = spritesheet[1];
-		else if (ydir < 0)
-			sr.sprite = spritesheet[3];
-		else if (xdir > 0)
-			sr.sprite = spritesheet[0];
-		else if (xdir < 0)
-			sr.sprite = spritesheet[2];
-
+		if ((Vector2)transform.position == targetPos) {
+			if (xdir != 0 || ydir != 0) {
+				setMoveTarget(xdir, ydir);
+			}
+		} else {
+			transform.position = Vector2.MoveTowards(transform.position, targetPos, speed);
+		}
+		rotatePlayer(xdir, ydir);
 
 		// Mouse actions
 		if (Input.GetButtonUp("PrimaryButton")) {
@@ -88,6 +101,18 @@ public class Player : StationObject {
 					break;
 				}
 			}
+		}
+	}
+
+	void rotatePlayer(float xdir, float ydir) {
+		if (ydir > 0) {
+			sr.sprite = spritesheet[1];
+		} else if (ydir < 0) {
+			sr.sprite = spritesheet[3];
+		} else if (xdir > 0) {
+			sr.sprite = spritesheet[0];
+		} else if (xdir < 0) {
+			sr.sprite = spritesheet[2];
 		}
 	}
 
