@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class Player : StationObject {
 	public float health = 100;
-	[SerializeField]
-	float speed = 0.2f;
 	public Sprite[] spritesheet;
 	new public Camera camera;
 	public Inventory inventory;
@@ -12,6 +10,21 @@ public class Player : StationObject {
 	SpriteRenderer sr;
 	int maskTile;
 	Vector2 targetPos;
+	float _speed = 0.2f;
+	[SerializeField]
+	float speed {
+		get {return _speed;}
+		set {
+			if (value < 0) {
+				speed = 0;
+			} else {
+				_speed = value;
+			}
+		}
+	}
+	[SerializeField]
+	float runSpeedBonus = 2.0f;
+	bool running = true;
 
 	public static string[] inventorySlotNames = {
 		"HandLeft",
@@ -39,7 +52,7 @@ public class Player : StationObject {
 		inventory.init(inventorySlotNames);
 		inventory.activeSlotName = "HandRight";
 		maskTile = LayerMask.GetMask("Tile");
-		targetPos = new Vector2(7,0);
+		targetPos = transform.position;
 	}
 
 	// Set move target if it is possible to move to it.
@@ -122,6 +135,15 @@ public class Player : StationObject {
 		} else {
 			inventory.activeSlotName = "HandRight";
 		}
+	}
+
+	public void toggleRunning() {
+		if (running) {
+			speed /= runSpeedBonus;
+		} else {
+			speed *= runSpeedBonus;
+		}
+		running = !running;
 	}
 
 	public void dropItem() {
