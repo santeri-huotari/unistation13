@@ -147,7 +147,7 @@ public class Player : StationObject {
 	public void dropItem() {
 		if (!inventory.activeSlot.isEmpty()) {
 			Instantiate(ItemDatabase.instance.getDroppedPrefab(inventory.activeSlot.item),
-			            transform.position,
+			            Utility.roundVector(transform.position),
 			            Quaternion.identity);
 			inventory.activeSlot.empty();
 		}
