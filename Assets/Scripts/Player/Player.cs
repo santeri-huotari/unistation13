@@ -88,9 +88,7 @@ public class Player : StationObject {
 
 		// Mouse actions
 		if (Input.GetButtonUp("PrimaryButton")) {
-			Vector2 mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
-			mousePos.x = Mathf.Round(mousePos.x);
-			mousePos.y = Mathf.Round(mousePos.y);
+			Vector2 mousePos = Utility.roundVector(camera.ScreenToWorldPoint(Input.mousePosition));
 			Vector2 relativeMousePos = mousePos - (Vector2)transform.position;
 			// Limit range to 1 tile
 			bool pickable = (Mathf.Abs(relativeMousePos.x) <= 1) && (Mathf.Abs(relativeMousePos.y) <= 1);
