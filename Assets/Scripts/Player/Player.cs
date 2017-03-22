@@ -127,7 +127,7 @@ public class Player : StationObject {
 		}
 	}
 
-	void swapHands() {
+	public void swapHands() {
 		if (inventory.activeSlotName == "HandRight") {
 			inventory.activeSlotName = "HandLeft";
 		} else {
