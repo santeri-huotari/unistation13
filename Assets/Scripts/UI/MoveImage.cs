@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public class MoveImage : MonoBehaviour {
 	[SerializeField]
@@ -11,7 +8,7 @@ public class MoveImage : MonoBehaviour {
 	[SerializeField]
 	Transform movableTransform;
 
-	public void moveImage() {
+	public void Move() {
 		if (movableTransform.position == firstTransform.position) {
 			movableTransform.position = secondTransform.position;
 		}

@@ -1,14 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DroppedItem : StationObject {
-	public Item item;
-	SpriteRenderer sr;
+	public Item Item;
+	SpriteRenderer spriteRenderer;
 
 	void Start() {
-		isPickable = true;
-		sr = gameObject.GetComponent<SpriteRenderer>();
-		sr.sprite = item.sprite;
+		IsPickable = true;
+		spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+		spriteRenderer.sprite = Item.Sprite;
 	}
 }

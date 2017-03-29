@@ -1,27 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class DefaultUI : MonoBehaviour {
-	public Player player;
-
+	[SerializeField]
+	Player player;
 	Dictionary<string, Image> uiSlotImages = new Dictionary<string, Image>();
 	Color transparent = new Color(0, 0, 0, 0);
 
 	void Awake() {
 		// Map player inventory slots to respective UI elements.
-		foreach (var slotName in Player.inventorySlotNames) {
+		foreach (var slotName in Player.InventorySlotNames) {
 			uiSlotImages.Add(slotName, GameObject.Find(slotName + "/Item").GetComponent<Image>());
 		}
 	}
 
 	void Update() {
 		// Update UI images
-		foreach (var slotName in Player.inventorySlotNames) {
-			Item item = player.inventory.slots[slotName].item;
+		foreach (var slotName in Player.InventorySlotNames) {
+			Item item = player.Inventory.Slots[slotName].Item;
 			if (item != null) {
-				uiSlotImages[slotName].sprite = item.sprite;
+				uiSlotImages[slotName].sprite = item.Sprite;
 				uiSlotImages[slotName].color = Color.white;
 			} else {
 				uiSlotImages[slotName].color = transparent;
@@ -29,7 +28,7 @@ public class DefaultUI : MonoBehaviour {
 		}
 	}
 
-	public void callMethodFromPlayer(string methodName) {
+	public void CallMethodFromPlayer(string methodName) {
 		player.Invoke(methodName, 0.0f);
 	}
 }

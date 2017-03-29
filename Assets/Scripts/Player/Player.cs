@@ -2,31 +2,34 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : StationObject {
-	public float health = 100;
-	public Sprite[] spritesheet;
-	new public Camera camera;
-	public Inventory inventory;
+	public float Health = 100;
+	[SerializeField]
+	Sprite[] spritesheet;
+	[SerializeField]
+	new Camera camera;
+	[HideInInspector]
+	public Inventory Inventory;
 
-	SpriteRenderer sr;
+	SpriteRenderer spriteRenderer;
 	int maskTile;
 	Vector2 targetPos;
-	float _speed = 0.2f;
+	float speed = 0.2f;
 	[SerializeField]
-	float speed {
-		get {return _speed;}
+	float Speed {
+		get {return speed;}
 		set {
 			if (value < 0) {
-				speed = 0;
+				Speed = 0;
 			} else {
-				_speed = value;
+				speed = value;
 			}
 		}
 	}
 	[SerializeField]
 	float runSpeedBonus = 2.0f;
-	bool running = true;
+	bool isRunning = true;
 
-	public static string[] inventorySlotNames = {
+	public static readonly string[] InventorySlotNames = {
 		"HandLeft",
 		"HandRight",
 		"PocketLeft",
@@ -47,23 +50,27 @@ public class Player : StationObject {
 	};
 
 	void Start() {
-		sr = gameObject.GetComponent<SpriteRenderer>();
-		inventory = gameObject.GetComponent<Inventory>();
-		inventory.init(inventorySlotNames);
-		inventory.activeSlotName = "HandRight";
+		spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+		Inventory = gameObject.GetComponent<Inventory>();
+		Inventory.Init(InventorySlotNames);
+		Inventory.ActiveSlotName = "HandRight";
 		maskTile = LayerMask.GetMask("Tile");
 		targetPos = transform.position;
 	}
 
-	// Set move target if it is possible to move to it.
-	void setMoveTarget(float xdir, float ydir) {
+	/// <summary>
+	/// Set move target if it is possible to move to it.
+	/// </summary>
+	/// <param name="xdir">Xdir.</param>
+	/// <param name="ydir">Ydir.</param>
+	void SetMoveTarget(float xdir, float ydir) {
 		Collider2D result = Physics2D.OverlapCircle(
 			                    new Vector2(transform.position.x + xdir,
 			                                transform.position.y + ydir),
 			                    0.0f,
 			                    maskTile);
 		if (result != null) {
-			if (!result.gameObject.GetComponent<Tile>().hasObstacle) {
+			if (!result.gameObject.GetComponent<Tile>().HasObstacle) {
 				targetPos.x += xdir;
 				targetPos.y += ydir;
 			}
@@ -79,16 +86,16 @@ public class Player : StationObject {
 		float ydir = Input.GetAxisRaw("Vertical");
 		if ((Vector2)transform.position == targetPos) {
 			if (xdir != 0 || ydir != 0) {
-				setMoveTarget(xdir, ydir);
+				SetMoveTarget(xdir, ydir);
 			}
 		} else {
-			transform.position = Vector2.MoveTowards(transform.position, targetPos, speed);
+			transform.position = Vector2.MoveTowards(transform.position, targetPos, Speed);
 		}
-		rotatePlayer(xdir, ydir);
+		RotatePlayer(xdir, ydir);
 
 		// Mouse actions
 		if (Input.GetButtonUp("PrimaryButton")) {
-			Vector2 mousePos = Utility.roundVector(camera.ScreenToWorldPoint(Input.mousePosition));
+			Vector2 mousePos = Utility.RoundVector(camera.ScreenToWorldPoint(Input.mousePosition));
 			Vector2 relativeMousePos = mousePos - (Vector2)transform.position;
 			// Limit range to 1 tile
 			bool pickable = (Mathf.Abs(relativeMousePos.x) <= 1) && (Mathf.Abs(relativeMousePos.y) <= 1);
@@ -100,14 +107,14 @@ public class Player : StationObject {
 				                    maskTile);
 
 			if (result != null) {
-				tileContents = result.gameObject.GetComponent<Tile>().contents;
+				tileContents = result.gameObject.GetComponent<Tile>().Contents;
 			}
 
 			// Pick item up
 			// TODO: Pick the topmost item first
 			foreach (var stationObject in tileContents) {
-				if (stationObject.isPickable && inventory.activeSlot.isEmpty() && pickable) {
-					inventory.activeSlot.item = ((DroppedItem)stationObject).item;
+				if (stationObject.IsPickable && Inventory.ActiveSlot.IsEmpty() && pickable) {
+					Inventory.ActiveSlot.Item = ((DroppedItem)stationObject).Item;
 					Destroy(stationObject.gameObject);
 					break;
 				}
@@ -115,41 +122,41 @@ public class Player : StationObject {
 		}
 	}
 
-	void rotatePlayer(float xdir, float ydir) {
+	void RotatePlayer(float xdir, float ydir) {
 		if (ydir > 0) {
-			sr.sprite = spritesheet[1];
+			spriteRenderer.sprite = spritesheet[1];
 		} else if (ydir < 0) {
-			sr.sprite = spritesheet[3];
+			spriteRenderer.sprite = spritesheet[3];
 		} else if (xdir > 0) {
-			sr.sprite = spritesheet[0];
+			spriteRenderer.sprite = spritesheet[0];
 		} else if (xdir < 0) {
-			sr.sprite = spritesheet[2];
+			spriteRenderer.sprite = spritesheet[2];
 		}
 	}
 
-	public void swapHands() {
-		if (inventory.activeSlotName == "HandRight") {
-			inventory.activeSlotName = "HandLeft";
+	public void SwapHands() {
+		if (Inventory.ActiveSlotName == "HandRight") {
+			Inventory.ActiveSlotName = "HandLeft";
 		} else {
-			inventory.activeSlotName = "HandRight";
+			Inventory.ActiveSlotName = "HandRight";
 		}
 	}
 
-	public void toggleRunning() {
-		if (running) {
-			speed /= runSpeedBonus;
+	public void ToggleRunning() {
+		if (isRunning) {
+			Speed /= runSpeedBonus;
 		} else {
-			speed *= runSpeedBonus;
+			Speed *= runSpeedBonus;
 		}
-		running = !running;
+		isRunning = !isRunning;
 	}
 
-	public void dropItem() {
-		if (!inventory.activeSlot.isEmpty()) {
-			Instantiate(ItemDatabase.instance.getDroppedPrefab(inventory.activeSlot.item),
-			            Utility.roundVector(transform.position),
+	public void DropItem() {
+		if (!Inventory.ActiveSlot.IsEmpty()) {
+			Instantiate(ItemDatabase.Instance.GetDroppedPrefab(Inventory.ActiveSlot.Item),
+			            Utility.RoundVector(transform.position),
 			            Quaternion.identity);
-			inventory.activeSlot.empty();
+			Inventory.ActiveSlot.Empty();
 		}
 	}
 }

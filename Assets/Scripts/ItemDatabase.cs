@@ -2,23 +2,24 @@
 using UnityEngine;
 
 public class ItemDatabase : MonoBehaviour {
-	public static ItemDatabase instance;
-	public GameObject droppedItemPrefab;
+	public static ItemDatabase Instance;
+	[SerializeField]
+	GameObject droppedItemPrefab;
 
 	Dictionary<ItemID, Item> items = new Dictionary<ItemID, Item>();
 
 	void Start() {
-		if (instance == null) {
-			instance = this;
+		if (Instance == null) {
+			Instance = this;
 		}
 	}
 
-	public static Item getItem(ItemID itemId) {
-		return instance.items[itemId];
+	public static Item GetItem(ItemID itemId) {
+		return Instance.items[itemId];
 	}
 
-	public GameObject getDroppedPrefab(Item item) {
-		droppedItemPrefab.GetComponent<DroppedItem>().item = item;
+	public GameObject GetDroppedPrefab(Item item) {
+		droppedItemPrefab.GetComponent<DroppedItem>().Item = item;
 		return droppedItemPrefab;
 	}
 }

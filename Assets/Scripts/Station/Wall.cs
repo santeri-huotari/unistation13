@@ -1,10 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Wall : StationObject {
+﻿public class Wall : StationObject {
 
 	void Start() {
-		isObstacle = true;
+		IsObstacle = true;
 	}
 }

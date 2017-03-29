@@ -1,15 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class WearablesToggle : MonoBehaviour {
-	public GameObject wearableSlots;
+	[SerializeField]
+	GameObject wearableSlots;
 
 	void Start() {
 		wearableSlots.SetActive(false);
 	}
 
-	public void toggleEquipmentSlots() {
+	public void ToggleEquipmentSlots() {
 		wearableSlots.SetActive(!wearableSlots.activeSelf);
 	}
 }

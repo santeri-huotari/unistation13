@@ -1,22 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour {
-	public Dictionary<string, ItemSlot> slots = new Dictionary<string, ItemSlot>();
-	public ItemSlot activeSlot;
-	string _activeSlotName = "";
-	public string activeSlotName {
-		get {return _activeSlotName;}
+	public Dictionary<string, ItemSlot> Slots = new Dictionary<string, ItemSlot>();
+	public ItemSlot ActiveSlot;
+	string activeSlotName = "";
+	public string ActiveSlotName {
+		get {return activeSlotName;}
 		set {
-			_activeSlotName = value;
-			activeSlot = slots[value];
+			activeSlotName = value;
+			ActiveSlot = Slots[value];
 		}
 	}
 
-	public void init(string[] slotNames) {
+	public void Init(string[] slotNames) {
 		foreach (var slotName in slotNames) {
-			slots.Add(slotName, new ItemSlot());
+			Slots.Add(slotName, new ItemSlot());
 		}
 	}
 }

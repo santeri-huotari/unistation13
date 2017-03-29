@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class SwitchImage : MonoBehaviour {
@@ -14,7 +12,7 @@ public class SwitchImage : MonoBehaviour {
 		image = gameObject.GetComponent<Image>();
 	}
 
-	public void switchImage() {
+	public void Switch() {
 		if (image.sprite == image2) {
 			image.sprite = image1;
 		} else {

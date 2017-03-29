@@ -1,25 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class ItemSlot {
-	Item _item;
-	public Item item {
-		get {return _item;}
+﻿public class ItemSlot {
+	Item item;
+	public Item Item {
+		get {return item;}
 		set {
-			if (value != null && value.size <= this.size) {
-				_item = value;
+			if (value != null && value.Size <= this.size) {
+				item = value;
 			}
 		}
 	}
 
 	int size = 1;
 
-	public bool isEmpty() {
-		return item == null;
+	public bool IsEmpty() {
+		return Item == null;
 	}
 
-	public void empty() {
-		_item = null;
+	/// <summary>
+	/// Remove the item from this slot.
+	/// </summary>
+	public void Empty() {
+		item = null;
 	}
 }

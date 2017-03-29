@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "Items/Generic Item")]
 public class Item : ScriptableObject {
-	public ItemID type;
-	public Sprite sprite;
-	public int stackSize;
-	public int size;
+	public ItemID Type;
+	public Sprite Sprite;
+	public int StackSize;
+	public int Size;
 }
 
 public enum ItemID {

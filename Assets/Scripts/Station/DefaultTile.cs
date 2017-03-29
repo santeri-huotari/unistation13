@@ -1,21 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DefaultTile : Tile {
-	public float oxygen = 0;
-	public float carbonDioxide = 0;
-	public float nitrogen = 0;
-	public float nitrousOxide = 0;
-	public float plasma = 0;
+	[SerializeField]
+	float oxygen = 0;
+	[SerializeField]
+	float carbonDioxide = 0;
+	[SerializeField]
+	float nitrogen = 0;
+	[SerializeField]
+	float nitrousOxide = 0;
+	[SerializeField]
+	float plasma = 0;
 
 	protected override void Start() {
-		gases["oxygen"] = oxygen;
-		gases["carbonDioxide"] = carbonDioxide;
-		gases["nitrogen"] = nitrogen;
-		gases["nitrousOxide"] = nitrousOxide;
-		gases["plasma"] = plasma;
-		Tile.defaultTile = this;
+		Gases["oxygen"] = oxygen;
+		Gases["carbonDioxide"] = carbonDioxide;
+		Gases["nitrogen"] = nitrogen;
+		Gases["nitrousOxide"] = nitrousOxide;
+		Gases["plasma"] = plasma;
+		Tile.DefaultTile = this;
 	}
 
 	protected override void FixedUpdate() {}

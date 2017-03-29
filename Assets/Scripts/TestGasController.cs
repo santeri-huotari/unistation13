@@ -1,16 +1,16 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class TestGasController : StationObject {
-	public float plasmaEmitInterval = 0;
-	public float noEmitInterval = 0;
-
+	[SerializeField]
+	float plasmaEmitInterval = 0;
+	[SerializeField]
+	float noEmitInterval = 0;
 	Floor tileBelow;
 
 	void Start() {
 		// Get a reference to the tile this gameobject is on top of.
-		Collider2D[] colliderStack = Physics2D.OverlapCircleAll(transform.position, 0.0f);
-		foreach (var collider in colliderStack) {
+		Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.0f);
+		foreach (var collider in colliders) {
 			Floor tile = collider.gameObject.GetComponent<Floor>();
 			if (tile != null) {
 				tileBelow = tile;
@@ -21,7 +21,7 @@ public class TestGasController : StationObject {
 
 	void FixedUpdate() {
 		// Emit gas
-		tileBelow.gases["plasma"] += plasmaEmitInterval;
-		tileBelow.gases["nitrousOxide"] += noEmitInterval;
+		tileBelow.Gases["plasma"] += plasmaEmitInterval;
+		tileBelow.Gases["nitrousOxide"] += noEmitInterval;
 	}
 }
